@@ -8,5 +8,5 @@ target 'Maskinfo' do
   # Pods for Maskinfo
   pod 'Alamofire'
   pod 'SwiftyJSON'
-  #pod 'NMapsMap'
+  pod 'NMapsMap'
 end
