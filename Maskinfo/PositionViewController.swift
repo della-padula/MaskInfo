@@ -15,6 +15,13 @@ class PositionViewController: UIViewController {
     
     @IBOutlet weak var naverMapView: NMFMapView!
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.navigationItem.title = item?.pharmacyName
+        self.navigationController?.navigationBar.tintColor = .white
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.naverMapView.minZoomLevel = 13.0
