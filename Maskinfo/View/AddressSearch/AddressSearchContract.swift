@@ -13,9 +13,17 @@ protocol ResultTableViewButtonDelegate {
 }
 
 protocol AddressSearchViewProtocol {
+    func showAlertInputError()
     
+    func applyListToTable()
+    
+    func alertErrorView()
 }
 
 protocol AddressSearchPresenterProtocol {
+    func loadStoreFromAddress(address: String)
     
+    func getStoreFromList(index: Int) -> ResultStore?
+    
+    func getStoreCount() -> Int
 }

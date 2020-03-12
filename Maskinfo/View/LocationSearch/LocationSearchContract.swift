@@ -11,7 +11,7 @@ import Foundation
 protocol LocationSearchViewProtocol {
     func setBuyInfo(descTitle: String, lastNumber: String, frontNumber: String)
     
-    func addMarkerToMap(resultArray: [ResultStore])
+    func addMarkerToMap()
     
     func alertErrorView()
 }
@@ -20,4 +20,6 @@ protocol LocationSearchPresenterProtocol {
     func loadStoreFromCurrentPosition(lat: Double, lng: Double)
     
     func getCanBuyNumber()
+    
+    func getResultList() -> [ResultStore]
 }

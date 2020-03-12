@@ -12,6 +12,7 @@ import SwiftyJSON
 
 class LocationSearchPresenter: LocationSearchPresenterProtocol {
     private var view: LocationSearchViewProtocol!
+    private var model = LocationSearchModel()
     
     init(view: LocationSearchViewProtocol) {
         self.view = view
@@ -21,13 +22,19 @@ class LocationSearchPresenter: LocationSearchPresenterProtocol {
         FetchModule.fetchStoreListByLocation(lat: lat, lng: lng, completion: { (result, list) in
             switch(result) {
             case .success:
-                self.view.addMarkerToMap(resultArray: list!)
+                self.model.resultList.removeAll()
+                self.model.resultList.append(contentsOf: list!)
+                self.view.addMarkerToMap()
             case .error:
                 self.view.alertErrorView()
             default:
                 break
             }
         })
+    }
+    
+    func getResultList() -> [ResultStore] {
+        return self.model.resultList
     }
     
     func getCanBuyNumber() {

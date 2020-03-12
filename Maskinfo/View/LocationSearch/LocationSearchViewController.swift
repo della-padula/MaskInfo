@@ -124,7 +124,7 @@ class LocationSearchViewController: UIViewController, LocationSearchViewProtocol
     }
     
     // View Protocol
-    func addMarkerToMap(resultArray: [ResultStore]) {
+    func addMarkerToMap() {
         for marker in self.markerList {
             marker.mapView = nil
         }
@@ -136,7 +136,7 @@ class LocationSearchViewController: UIViewController, LocationSearchViewProtocol
         self.markerList.removeAll()
         self.infoViewList.removeAll()
         
-        for result in resultArray {
+        for result in self.presenter.getResultList() {
             let marker = NMFMarker()
             marker.position = NMGLatLng(lat: Double(result.latitude!), lng: Double(result.longitude!))
             
