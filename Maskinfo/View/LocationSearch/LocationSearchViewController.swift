@@ -13,7 +13,7 @@ import Alamofire
 import SwiftyJSON
 import CoreLocation
 
-class LocationSearchViewController: UIViewController, CLLocationManagerDelegate, NMFMapViewDelegate {
+class LocationSearchViewController: UIViewController, LocationSearchViewProtocol, CLLocationManagerDelegate, NMFMapViewDelegate {
     @IBOutlet weak var naverMapView: NMFMapView!
     
     // But Info
@@ -46,8 +46,10 @@ class LocationSearchViewController: UIViewController, CLLocationManagerDelegate,
     @IBOutlet weak var searchNowPositionView: UIView!
     @IBOutlet weak var userPositionImageView: UIImageView!
     @IBAction func onClickUserPosition(_ sender: Any) {
-        self.loadStoreFromCurrentPosition(lat: self.naverMapView.cameraPosition.target.lat, lng: self.naverMapView.cameraPosition.target.lng)
+        self.presenter.loadStoreFromCurrentPosition(lat: self.naverMapView.cameraPosition.target.lat, lng: self.naverMapView.cameraPosition.target.lng)
     }
+    
+    private var presenter: LocationSearchPresenterProtocol!
     
     var locationManager: CLLocationManager!
     var curLatitude: Double = 37.566642
@@ -59,34 +61,22 @@ class LocationSearchViewController: UIViewController, CLLocationManagerDelegate,
     var markerList = [NMFMarker]()
     var infoViewList = [NMFInfoWindow]()
     
-    private func setBuyInfo() {
-        let date = Date()
-        let calendar = Calendar.current
-        let components = calendar.dateComponents([.year, .weekday], from: date)
-        
-        let weekday = components.weekday ?? 1
-        
-        // 1, 2, 3, 4, 5
-        // 6, 7, 8, 9, 10
-        if weekday > 1 && weekday < 7 {
-            lblFrontDesc.text = "주민번호 연도 끝자리"
-            lblLastNumber.text = "\(weekday - 1), \(weekday + 4)"
-            lblFrontString.text = "주민번호 앞자리가 X\(weekday - 1)XXXX, X\(weekday + 4)XXXX"
-        } else {
-            lblFrontDesc.text = "마스크를 판매하지 않습니다."
-            lblLastNumber.text = ""
-            lblFrontString.text = "평일에 구매 가능합니다."
-        }
+    func setBuyInfo(descTitle: String, lastNumber: String, frontNumber: String) {
+        lblFrontDesc.text = descTitle
+        lblLastNumber.text = lastNumber
+        lblFrontString.text = frontNumber
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.setBuyInfo()
+        self.presenter.getCanBuyNumber()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setLocation()
+        
+        self.presenter = LocationSearchPresenter(view: self)
         
         self.detailHeight.constant = 0
         
@@ -116,12 +106,12 @@ class LocationSearchViewController: UIViewController, CLLocationManagerDelegate,
         self.locationImageView.tintColor = .white
         self.locationImageView.image = image
         
-        self.userPositionImageView.tintColor = UIColor(hex: "#1B3B86", alpha: 1.0)
+        self.userPositionImageView.tintColor = .MAIN
         self.userPositionImageView.image = image
         
         self.searchNowPositionView.layer.cornerRadius = 24
         self.searchNowPositionView.layer.borderWidth = 1.5
-        self.searchNowPositionView.layer.borderColor = UIColor(hex: "#1B3B86", alpha: 1.0).cgColor
+        self.searchNowPositionView.layer.borderColor = UIColor.MAIN.cgColor
     }
     
     private func setLocation() {
@@ -133,118 +123,70 @@ class LocationSearchViewController: UIViewController, CLLocationManagerDelegate,
         locationManager.startUpdatingLocation()
     }
     
+    // View Protocol
+    func addMarkerToMap(resultArray: [ResultStore]) {
+        for marker in self.markerList {
+            marker.mapView = nil
+        }
+        
+        for infoView in self.infoViewList {
+            infoView.mapView = nil
+        }
+        
+        self.markerList.removeAll()
+        self.infoViewList.removeAll()
+        
+        for result in resultArray {
+            let marker = NMFMarker()
+            marker.position = NMGLatLng(lat: Double(result.latitude!), lng: Double(result.longitude!))
+            
+            switch(result.remainStatus) {
+            case .plenty:
+                marker.iconImage = NMFOverlayImage(image: UIImage(named: "circle_green")!)
+            case .someThing:
+                marker.iconImage = NMFOverlayImage(image: UIImage(named: "circle_yellow")!)
+            case .few:
+                marker.iconImage = NMFOverlayImage(image: UIImage(named: "circle_red")!)
+            case .empty:
+                marker.iconImage = NMFOverlayImage(image: UIImage(named: "circle_gray")!)
+            default:
+                marker.iconImage = NMFOverlayImage(image: UIImage(named: "circle_unknown")!)
+            }
+            marker.width = 40
+            marker.height = 40
+            marker.mapView = self.naverMapView
+            
+            marker.touchHandler = { (overlay: NMFOverlay) -> Bool in
+                for infoView in self.infoViewList {
+                    infoView.mapView = nil
+                }
+                
+                self.infoViewList.removeAll()
+                
+                if result.pharmacyName != nil {
+                    let infoWindow = NMFInfoWindow()
+                    let dataSource = NMFInfoWindowDefaultTextSource.data()
+                    dataSource.title = result.pharmacyName!
+                    infoWindow.dataSource = dataSource
+                    infoWindow.open(with: marker)
+                    
+                    self.infoViewList.append(infoWindow)
+                }
+                self.showDetailView(item: result)
+                return true
+            }
+            self.markerList.append(marker)
+        }
+    }
+    
+    func alertErrorView() {
+        print("Error Occurred.")
+    }
+    
     func moveToCurrentPosition() {
         let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: curLatitude, lng: curLongitude))
         cameraUpdate.animation = .easeIn
         naverMapView.moveCamera(cameraUpdate)
-    }
-    
-    func loadStoreFromCurrentPosition(lat: Double, lng: Double) {
-        let requestURL = "https://8oi9s0nnth.apigw.ntruss.com/corona19-masks/v1/storesByGeo/json?lat=\(lat)&lng=\(lng)&m=\(distance)"
-        
-        AF.request(requestURL).responseJSON { response in
-            switch response.result {
-            case .success(let value):
-                print(JSON(value)["count"])
-                if let jsonArray = JSON(value)["stores"].array {
-                    for marker in self.markerList {
-                        marker.mapView = nil
-                    }
-                    
-                    for infoView in self.infoViewList {
-                        infoView.mapView = nil
-                    }
-                    
-                    self.markerList.removeAll()
-                    self.infoViewList.removeAll()
-                    
-                    for jsonObject in jsonArray {
-                        let pharmacyName       = jsonObject["name"].string
-                        let stockAt            = jsonObject["stock_at"].string
-                        let remainStatusString = jsonObject["remain_stat"].string
-                        let storeType          = jsonObject["type"].string
-                        let address            = jsonObject["addr"].string
-                        let uniqueCode         = jsonObject["code"].string
-                        let latitude           = jsonObject["lat"].float
-                        let longitude          = jsonObject["lng"].float
-                        
-                        var type: StoreType?
-                        var remainStatus: RemainStatus?
-                        
-                        switch(storeType) {
-                        case "01":
-                            type = .pharmacy
-                        case "02":
-                            type = .post
-                        case "03":
-                            type = .nonghyup
-                        default:
-                            break
-                        }
-                        
-                        switch(remainStatusString) {
-                        case "plenty":
-                            remainStatus = .plenty
-                        case "some":
-                            remainStatus = .someThing
-                        case "few":
-                            remainStatus = .few
-                        case "empty":
-                            remainStatus = .empty
-                        default:
-                            print("remainStatusString : \(remainStatusString)")
-                            remainStatus = .unknown
-                            break
-                        }
-                        
-                        if let lat = jsonObject["lat"].double, let lng = jsonObject["lng"].double {
-                            let marker = NMFMarker()
-                            marker.position = NMGLatLng(lat: lat, lng: lng)
-                            
-                            switch(remainStatus) {
-                            case .plenty:
-                                marker.iconImage = NMFOverlayImage(image: UIImage(named: "circle_green")!)
-                            case .someThing:
-                                marker.iconImage = NMFOverlayImage(image: UIImage(named: "circle_yellow")!)
-                            case .few:
-                                marker.iconImage = NMFOverlayImage(image: UIImage(named: "circle_red")!)
-                            case .empty:
-                                marker.iconImage = NMFOverlayImage(image: UIImage(named: "circle_gray")!)
-                            default:
-                                marker.iconImage = NMFOverlayImage(image: UIImage(named: "circle_unknown")!)
-                            }
-                            marker.width = 40
-                            marker.height = 40
-                            marker.mapView = self.naverMapView
-                            
-                            marker.touchHandler = { (overlay: NMFOverlay) -> Bool in
-                                for infoView in self.infoViewList {
-                                    infoView.mapView = nil
-                                }
-                                
-                                self.infoViewList.removeAll()
-                                
-                                if pharmacyName != nil {
-                                    let infoWindow = NMFInfoWindow()
-                                    let dataSource = NMFInfoWindowDefaultTextSource.data()
-                                    dataSource.title = pharmacyName!
-                                    infoWindow.dataSource = dataSource
-                                    infoWindow.open(with: marker)
-                                    
-                                    self.infoViewList.append(infoWindow)
-                                }
-                                self.showDetailView(item: ResultStore(pharmacyName: pharmacyName, address: address, stockAt: stockAt, latitude: latitude, longitude: longitude, storeType: type, code: uniqueCode, remainStatus: remainStatus))
-                                return true
-                            }
-                            self.markerList.append(marker)
-                        }
-                    }
-                }
-                break
-            case .failure(_):
-                break
-            }
-        }
     }
     
     func showDetailView(item: ResultStore) {
@@ -344,7 +286,7 @@ class LocationSearchViewController: UIViewController, CLLocationManagerDelegate,
             if !isInitialLoaded {
                 self.isInitialLoaded = true
                 self.moveToCurrentPosition()
-                self.loadStoreFromCurrentPosition(lat: curLatitude, lng: curLongitude)
+                self.presenter.loadStoreFromCurrentPosition(lat: curLatitude, lng: curLongitude)
             }
         }
     }
@@ -354,7 +296,6 @@ class LocationSearchViewController: UIViewController, CLLocationManagerDelegate,
     }
     
     // Naver Map Delegate
-    
     func mapViewRegionIsChanging(_ mapView: NMFMapView, byReason reason: Int) {
         print("카메라 변경 - reason: \(reason)")
     }
@@ -368,37 +309,5 @@ class LocationSearchViewController: UIViewController, CLLocationManagerDelegate,
             infoView.mapView = nil
         }
         
-    }
-}
-
-extension UIColor {
-    open class var GREEN: UIColor {
-        get {
-            return UIColor(hex: "#00B140", alpha: 1.0)
-        }
-    }
-    
-    open class var YELLOW: UIColor {
-        get {
-            return UIColor(hex: "#C7622D", alpha: 1.0)
-        }
-    }
-    
-    open class var RED: UIColor {
-        get {
-            return UIColor(hex: "#C72B4F", alpha: 1.0)
-        }
-    }
-    
-    open class var GRAY: UIColor {
-        get {
-            return UIColor(hex: "#DADADA", alpha: 1.0)
-        }
-    }
-    
-    open class var UNKNOWN: UIColor {
-        get {
-            return UIColor(hex: "#343434", alpha: 1.0)
-        }
     }
 }

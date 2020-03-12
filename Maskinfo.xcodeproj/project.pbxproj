@@ -17,6 +17,13 @@
 		DE25B4882417C507006C832E /* ResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE25B4872417C507006C832E /* ResultTableViewCell.swift */; };
 		DE30070D241A1EE500EDD031 /* NMapsMap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE30070C241A1EE500EDD031 /* NMapsMap.framework */; };
 		DE300711241A37F900EDD031 /* PositionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE300710241A37F900EDD031 /* PositionViewController.swift */; };
+		DE300718241A642300EDD031 /* LocationSearchPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE300717241A642300EDD031 /* LocationSearchPresenter.swift */; };
+		DE30071B241A643200EDD031 /* LocationSearchContract.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE30071A241A643200EDD031 /* LocationSearchContract.swift */; };
+		DE300720241A661900EDD031 /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE30071F241A661900EDD031 /* DataModel.swift */; };
+		DE300722241A664300EDD031 /* AddressSearchContract.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE300721241A664300EDD031 /* AddressSearchContract.swift */; };
+		DE300724241A666F00EDD031 /* AddressSearchPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE300723241A666F00EDD031 /* AddressSearchPresenter.swift */; };
+		DE300727241A668D00EDD031 /* FetchModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE300726241A668D00EDD031 /* FetchModule.swift */; };
+		DE37336A241A6B500005640C /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE373369241A6B500005640C /* UIColor+Extensions.swift */; };
 		DED07EE424188C0800FF1B88 /* LocationSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED07EE324188C0800FF1B88 /* LocationSearchViewController.swift */; };
 		E7BE8B39EBC2F71B1089B381 /* Pods_Maskinfo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BB488FFBFF3C7A35CFEFDC3 /* Pods_Maskinfo.framework */; };
 /* End PBXBuildFile section */
@@ -37,6 +44,13 @@
 		DE25B4872417C507006C832E /* ResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultTableViewCell.swift; sourceTree = "<group>"; };
 		DE30070C241A1EE500EDD031 /* NMapsMap.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NMapsMap.framework; path = Pods/NMapsMap/framework/NMapsMap.framework; sourceTree = "<group>"; };
 		DE300710241A37F900EDD031 /* PositionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositionViewController.swift; sourceTree = "<group>"; };
+		DE300717241A642300EDD031 /* LocationSearchPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchPresenter.swift; sourceTree = "<group>"; };
+		DE30071A241A643200EDD031 /* LocationSearchContract.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchContract.swift; sourceTree = "<group>"; };
+		DE30071F241A661900EDD031 /* DataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
+		DE300721241A664300EDD031 /* AddressSearchContract.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressSearchContract.swift; sourceTree = "<group>"; };
+		DE300723241A666F00EDD031 /* AddressSearchPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressSearchPresenter.swift; sourceTree = "<group>"; };
+		DE300726241A668D00EDD031 /* FetchModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchModule.swift; sourceTree = "<group>"; };
+		DE373369241A6B500005640C /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
 		DED07EE324188C0800FF1B88 /* LocationSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -92,19 +106,82 @@
 		DE25B46C2417AA6B006C832E /* Maskinfo */ = {
 			isa = PBXGroup;
 			children = (
+				DE300725241A668000EDD031 /* Network */,
+				DE30071E241A660F00EDD031 /* Model */,
+				DE300714241A63EE00EDD031 /* View */,
 				DE25B46D2417AA6B006C832E /* AppDelegate.swift */,
-				DE25B4712417AA6B006C832E /* ViewController.swift */,
 				DE25B4732417AA6B006C832E /* Main.storyboard */,
 				DE25B4762417AA6D006C832E /* Assets.xcassets */,
 				DE25B4782417AA6D006C832E /* LaunchScreen.storyboard */,
 				DE25B47B2417AA6D006C832E /* Info.plist */,
 				DE25B4812417B213006C832E /* CustomTextField.swift */,
 				DE25B4832417B2FC006C832E /* CustomButton.swift */,
-				DE25B4872417C507006C832E /* ResultTableViewCell.swift */,
-				DED07EE324188C0800FF1B88 /* LocationSearchViewController.swift */,
-				DE300710241A37F900EDD031 /* PositionViewController.swift */,
+				DE373369241A6B500005640C /* UIColor+Extensions.swift */,
 			);
 			path = Maskinfo;
+			sourceTree = "<group>";
+		};
+		DE300714241A63EE00EDD031 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				DE30071C241A64EF00EDD031 /* LocationDetail */,
+				DE300716241A640A00EDD031 /* AddressSearch */,
+				DE300715241A63FD00EDD031 /* LocationSearch */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		DE300715241A63FD00EDD031 /* LocationSearch */ = {
+			isa = PBXGroup;
+			children = (
+				DED07EE324188C0800FF1B88 /* LocationSearchViewController.swift */,
+				DE300717241A642300EDD031 /* LocationSearchPresenter.swift */,
+				DE30071A241A643200EDD031 /* LocationSearchContract.swift */,
+			);
+			path = LocationSearch;
+			sourceTree = "<group>";
+		};
+		DE300716241A640A00EDD031 /* AddressSearch */ = {
+			isa = PBXGroup;
+			children = (
+				DE30071D241A650000EDD031 /* Cell */,
+				DE25B4712417AA6B006C832E /* ViewController.swift */,
+				DE300721241A664300EDD031 /* AddressSearchContract.swift */,
+				DE300723241A666F00EDD031 /* AddressSearchPresenter.swift */,
+			);
+			path = AddressSearch;
+			sourceTree = "<group>";
+		};
+		DE30071C241A64EF00EDD031 /* LocationDetail */ = {
+			isa = PBXGroup;
+			children = (
+				DE300710241A37F900EDD031 /* PositionViewController.swift */,
+			);
+			path = LocationDetail;
+			sourceTree = "<group>";
+		};
+		DE30071D241A650000EDD031 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				DE25B4872417C507006C832E /* ResultTableViewCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		DE30071E241A660F00EDD031 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				DE30071F241A661900EDD031 /* DataModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		DE300725241A668000EDD031 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				DE300726241A668D00EDD031 /* FetchModule.swift */,
+			);
+			path = Network;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -225,10 +302,17 @@
 				DE25B4842417B2FC006C832E /* CustomButton.swift in Sources */,
 				DE300711241A37F900EDD031 /* PositionViewController.swift in Sources */,
 				DE25B4722417AA6B006C832E /* ViewController.swift in Sources */,
+				DE30071B241A643200EDD031 /* LocationSearchContract.swift in Sources */,
+				DE300722241A664300EDD031 /* AddressSearchContract.swift in Sources */,
 				DED07EE424188C0800FF1B88 /* LocationSearchViewController.swift in Sources */,
+				DE300720241A661900EDD031 /* DataModel.swift in Sources */,
+				DE300724241A666F00EDD031 /* AddressSearchPresenter.swift in Sources */,
+				DE300727241A668D00EDD031 /* FetchModule.swift in Sources */,
 				DE25B46E2417AA6B006C832E /* AppDelegate.swift in Sources */,
 				DE25B4882417C507006C832E /* ResultTableViewCell.swift in Sources */,
+				DE37336A241A6B500005640C /* UIColor+Extensions.swift in Sources */,
 				DE25B4822417B213006C832E /* CustomTextField.swift in Sources */,
+				DE300718241A642300EDD031 /* LocationSearchPresenter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
