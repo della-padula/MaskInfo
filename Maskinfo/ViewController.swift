@@ -35,6 +35,10 @@ struct ResultStore {
     var remainStatus: RemainStatus? // 재고 타입
 }
 
+protocol ResultTableViewButtonDelegate {
+    func didSelectPositionButton(item: ResultStore?)
+}
+
 class ViewController: UIViewController {
     
     @IBOutlet weak var textField: CustomTextField!
@@ -47,8 +51,9 @@ class ViewController: UIViewController {
     @IBAction func onClickSearchByAddr(sender: UIButton) {
         self.view.endEditing(true)
         var inputValue = ""
+        inputValue = textField.text ?? ""
         
-        if (textField.text ?? "").last == " " {
+        if inputValue.last == " " {
             inputValue = textField.text ?? ""
             inputValue.removeLast()
         }
@@ -212,11 +217,21 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         
         cell.item = self.resultStoreList[indexPath.row]
         cell.selectionStyle  = .none
+        cell.delegate = self
         
         return cell
     }
     
     
+}
+
+extension ViewController: ResultTableViewButtonDelegate {
+    func didSelectPositionButton(item: ResultStore?) {
+        let storyboard = self.storyboard
+        let positionVC = storyboard?.instantiateViewController(withIdentifier: "positionVC") as! PositionViewController
+        positionVC.item = item
+        self.navigationController?.pushViewController(positionVC, animated: true)
+    }
 }
 
 extension UIColor {

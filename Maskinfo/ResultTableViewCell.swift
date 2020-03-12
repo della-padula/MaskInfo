@@ -22,6 +22,12 @@ class ResultTableViewCell: UITableViewCell {
         }
     }
     
+    var delegate: ResultTableViewButtonDelegate?
+    
+    @IBAction func onClickPositionBtn(_ sender: UIButton) {
+        delegate?.didSelectPositionButton(item: self.item)
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

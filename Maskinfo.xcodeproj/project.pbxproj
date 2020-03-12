@@ -16,6 +16,7 @@
 		DE25B4842417B2FC006C832E /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE25B4832417B2FC006C832E /* CustomButton.swift */; };
 		DE25B4882417C507006C832E /* ResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE25B4872417C507006C832E /* ResultTableViewCell.swift */; };
 		DE30070D241A1EE500EDD031 /* NMapsMap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE30070C241A1EE500EDD031 /* NMapsMap.framework */; };
+		DE300711241A37F900EDD031 /* PositionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE300710241A37F900EDD031 /* PositionViewController.swift */; };
 		DED07EE424188C0800FF1B88 /* LocationSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED07EE324188C0800FF1B88 /* LocationSearchViewController.swift */; };
 		E7BE8B39EBC2F71B1089B381 /* Pods_Maskinfo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BB488FFBFF3C7A35CFEFDC3 /* Pods_Maskinfo.framework */; };
 /* End PBXBuildFile section */
@@ -35,6 +36,7 @@
 		DE25B4832417B2FC006C832E /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
 		DE25B4872417C507006C832E /* ResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultTableViewCell.swift; sourceTree = "<group>"; };
 		DE30070C241A1EE500EDD031 /* NMapsMap.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NMapsMap.framework; path = Pods/NMapsMap/framework/NMapsMap.framework; sourceTree = "<group>"; };
+		DE300710241A37F900EDD031 /* PositionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PositionViewController.swift; sourceTree = "<group>"; };
 		DED07EE324188C0800FF1B88 /* LocationSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSearchViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -100,6 +102,7 @@
 				DE25B4832417B2FC006C832E /* CustomButton.swift */,
 				DE25B4872417C507006C832E /* ResultTableViewCell.swift */,
 				DED07EE324188C0800FF1B88 /* LocationSearchViewController.swift */,
+				DE300710241A37F900EDD031 /* PositionViewController.swift */,
 			);
 			path = Maskinfo;
 			sourceTree = "<group>";
@@ -220,6 +223,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DE25B4842417B2FC006C832E /* CustomButton.swift in Sources */,
+				DE300711241A37F900EDD031 /* PositionViewController.swift in Sources */,
 				DE25B4722417AA6B006C832E /* ViewController.swift in Sources */,
 				DED07EE424188C0800FF1B88 /* LocationSearchViewController.swift in Sources */,
 				DE25B46E2417AA6B006C832E /* AppDelegate.swift in Sources */,
