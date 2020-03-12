@@ -57,6 +57,7 @@ class LocationSearchViewController: UIViewController, CLLocationManagerDelegate,
     var isInitialLoaded = false
     
     var markerList = [NMFMarker]()
+    var infoViewList = [NMFInfoWindow]()
     
     private func setBuyInfo() {
         let date = Date()
@@ -78,10 +79,14 @@ class LocationSearchViewController: UIViewController, CLLocationManagerDelegate,
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.setBuyInfo()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setLocation()
-        self.setBuyInfo()
         
         self.detailHeight.constant = 0
         
@@ -103,8 +108,8 @@ class LocationSearchViewController: UIViewController, CLLocationManagerDelegate,
         self.detailShadowView.layer.shadowOpacity = 0.4
         self.detailShadowView.layer.shadowRadius = 12
         
-        self.naverMapView.minZoomLevel = 13.0
-        self.naverMapView.maxZoomLevel = 15.0
+        self.naverMapView.minZoomLevel = 12.0
+        self.naverMapView.maxZoomLevel = 16.0
         self.naverMapView.delegate = self
         
         let image = UIImage(named: "compass")?.withRenderingMode(.alwaysTemplate)
@@ -146,7 +151,12 @@ class LocationSearchViewController: UIViewController, CLLocationManagerDelegate,
                         marker.mapView = nil
                     }
                     
+                    for infoView in self.infoViewList {
+                        infoView.mapView = nil
+                    }
+                    
                     self.markerList.removeAll()
+                    self.infoViewList.removeAll()
                     
                     for jsonObject in jsonArray {
                         let pharmacyName       = jsonObject["name"].string
@@ -208,9 +218,21 @@ class LocationSearchViewController: UIViewController, CLLocationManagerDelegate,
                             marker.mapView = self.naverMapView
                             
                             marker.touchHandler = { (overlay: NMFOverlay) -> Bool in
+                                for infoView in self.infoViewList {
+                                    infoView.mapView = nil
+                                }
                                 
+                                self.infoViewList.removeAll()
                                 
-
+                                if pharmacyName != nil {
+                                    let infoWindow = NMFInfoWindow()
+                                    let dataSource = NMFInfoWindowDefaultTextSource.data()
+                                    dataSource.title = pharmacyName!
+                                    infoWindow.dataSource = dataSource
+                                    infoWindow.open(with: marker)
+                                    
+                                    self.infoViewList.append(infoWindow)
+                                }
                                 self.showDetailView(item: ResultStore(pharmacyName: pharmacyName, address: address, stockAt: stockAt, latitude: latitude, longitude: longitude, storeType: type, code: uniqueCode, remainStatus: remainStatus))
                                 return true
                             }
@@ -341,6 +363,11 @@ class LocationSearchViewController: UIViewController, CLLocationManagerDelegate,
     func didTapMapView(_ point: CGPoint, latLng latlng: NMGLatLng) {
         print("지도 탭")
         detailHeight.constant = 0
+        
+        for infoView in self.infoViewList {
+            infoView.mapView = nil
+        }
+        
     }
 }
 

@@ -46,9 +46,13 @@ class ViewController: UIViewController {
     
     @IBAction func onClickSearchByAddr(sender: UIButton) {
         self.view.endEditing(true)
-        print("Inputed Text : \(textField.text)")
+        var inputValue = ""
         
-        self.fetchMashInfoByAddr(address: textField.text ?? "")
+        if (textField.text ?? "").last == " " {
+            inputValue = textField.text ?? ""
+            inputValue.removeLast()
+        }
+        self.fetchMashInfoByAddr(address: inputValue)
         
         self.indicatorView.isHidden = false
         self.indicator.isHidden = false
