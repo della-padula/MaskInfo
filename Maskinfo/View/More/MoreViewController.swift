@@ -28,11 +28,26 @@ class MoreViewController: BaseViewController, MoreViewProtocol {
         self.presenter = MorePresenter(view: self)
 //        self.presenter.checkForUpdates()
         
+        self.navigationController?.navigationBar.barStyle = .black
+         
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
     }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+            if #available(iOS 13.0, *) {
+                if traitCollection.userInterfaceStyle == .light {
+    //                return .darkContent
+                } else {
+    //                return .lightContent
+                }
+                return .lightContent
+            } else {
+                return .lightContent
+            }
+        }
     
     func showUpdateAlert(isRequired: Bool) {
         if isRequired {
@@ -85,6 +100,8 @@ extension MoreViewController: UITableViewDelegate, UITableViewDataSource {
             if let url = URL(string: "mailto:\(email)") {
                 UIApplication.shared.open(url)
             }
+        } else if menuTypeList[indexPath.row - 1 ] == .normal {
+            self.showAlertOKWithHandler(title: "오픈소스 사용 목록", msg: "Alamofire - Network Library\nNMapsMap - Naver Map API\nSwiftyJSON - swift json", handler: nil)
         }
     }
     
