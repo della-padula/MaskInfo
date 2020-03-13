@@ -21,14 +21,7 @@ class ViewController: UIViewController, AddressSearchViewProtocol {
     
     @IBAction func onClickSearchByAddr(sender: UIButton) {
         self.view.endEditing(true)
-        var inputValue = ""
-        inputValue = textField.text ?? ""
-        
-        if inputValue.last == " " {
-            inputValue = textField.text ?? ""
-            inputValue.removeLast()
-        }
-        self.presenter.loadStoreFromAddress(address: inputValue)
+        self.presenter.loadStoreFromAddress(address: textField.text)
         
         self.indicatorView.isHidden = false
         self.indicator.isHidden = false
@@ -74,7 +67,7 @@ class ViewController: UIViewController, AddressSearchViewProtocol {
         self.textField.layer.borderWidth = 1
         self.textField.layer.borderColor = UIColor.white.cgColor
         self.textField.tintColor = .white
-        self.textField.attributedPlaceholder = NSAttributedString(string: "구/동 단위 주소 입력(ex:서울특별시 동작구)", attributes: [NSAttributedString.Key.foregroundColor: UIColor(hex: "#FFFFFF", alpha: 0.7)])
+        self.textField.attributedPlaceholder = NSAttributedString(string: "구/동 단위 주소 입력(ex:서울특별시 동작구)", attributes: [NSAttributedString.Key.foregroundColor: UIColor.TFIELD])
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

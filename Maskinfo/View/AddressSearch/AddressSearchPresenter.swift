@@ -30,8 +30,15 @@ class AddressSearchPresenter: AddressSearchPresenterProtocol {
         }
     }
     
-    func loadStoreFromAddress(address: String) {
-        FetchModule.fetchStoreListByAddress(address: address, completion: { (result, list) in
+    func loadStoreFromAddress(address: String?) {
+        var inputValue = ""
+        inputValue = address ?? ""
+        
+        if inputValue.last == " " {
+            inputValue.removeLast()
+        }
+        
+        FetchModule.fetchStoreListByAddress(address: inputValue, completion: { (result, list) in
             switch(result) {
             case .success:
                 if list?.count ?? 0 > 0 {

@@ -30,6 +30,13 @@ extension UIColor {
 }
 
 extension UIColor {
+    
+    open class var TFIELD: UIColor {
+        get {
+            return UIColor(hex: "#FFFFFF", alpha: 0.7)
+        }
+    }
+    
     open class var MAIN: UIColor {
         get {
             return UIColor(hex: "#1B3B86", alpha: 1.0)

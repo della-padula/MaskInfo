@@ -21,7 +21,7 @@ protocol AddressSearchViewProtocol {
 }
 
 protocol AddressSearchPresenterProtocol {
-    func loadStoreFromAddress(address: String)
+    func loadStoreFromAddress(address: String?)
     
     func getStoreFromList(index: Int) -> ResultStore?
     
