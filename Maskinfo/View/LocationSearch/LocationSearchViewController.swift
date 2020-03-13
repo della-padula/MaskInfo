@@ -16,6 +16,13 @@ import CoreLocation
 class LocationSearchViewController: UIViewController, LocationSearchViewProtocol, CLLocationManagerDelegate, NMFMapViewDelegate {
     @IBOutlet weak var naverMapView: NMFMapView!
     
+    // Info Popup View
+    @IBOutlet weak var infoPopupView: UIView!
+    @IBOutlet weak var lblInfoContent: UILabel!
+    @IBAction func onClickOKButton(_ sender: Any) {
+        self.infoPopupView.isHidden = true
+    }
+    
     // But Info
     @IBOutlet weak var butInfoView    : UIView!
     @IBOutlet weak var buyDetailView  : UIView!
@@ -75,6 +82,8 @@ class LocationSearchViewController: UIViewController, LocationSearchViewProtocol
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setLocation()
+        
+        self.lblInfoContent.text = CommonProperty.infoText
         
         self.presenter = LocationSearchPresenter(view: self)
         
