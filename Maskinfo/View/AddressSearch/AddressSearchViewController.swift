@@ -61,7 +61,22 @@ class ViewController: UIViewController, AddressSearchViewProtocol {
                 self.btnSearch.isUserInteractionEnabled = true
             }
         })
+        
+        self.navigationController?.navigationBar.barStyle = .black
     }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+            if #available(iOS 13.0, *) {
+                if traitCollection.userInterfaceStyle == .light {
+    //                return .darkContent
+                } else {
+    //                return .lightContent
+                }
+                return .lightContent
+            } else {
+                return .lightContent
+            }
+        }
     
     private func setLayout() {
         self.textField.layer.borderWidth = 1
