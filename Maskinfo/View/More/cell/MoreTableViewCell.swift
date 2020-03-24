@@ -31,7 +31,8 @@ class MoreNormalCell: UITableViewCell {
     
     private func setDataToView() {
         if type == .version {
-            updateView.isHidden = false
+            updateView.isHidden = true
+//            updateView.isHidden = true
         } else {
             self.titleLabel.text = title
             updateView.isHidden = true
